@@ -1,32 +1,17 @@
-<<<<<<< HEAD
 from flask import Flask, request, jsonify, send_from_directory
-=======
-from flask import Flask, request, jsonify
-
-# Create Flask app instance - THIS IS CRITICAL
-app = Flask(__name__)
-
-# Your other imports and code here...
->>>>>>> de8c92afba31a238e88df910e68a70c502b43c9b
 import pickle
 import re
 import nltk
 from nltk.corpus import stopwords
 import os
-<<<<<<< HEAD
 from pyngrok import ngrok
 
 # Download necessary NLTK data
-=======
-
-# Download NLTK data
->>>>>>> de8c92afba31a238e88df910e68a70c502b43c9b
 try:
     nltk.download('stopwords', quiet=True)
 except:
     pass
 
-<<<<<<< HEAD
 app = Flask(__name__, static_folder='static')
 
 # Define stopwords set
@@ -41,18 +26,6 @@ def preprocess_text(text):
     return " ".join(tokens)
 
 # Load the model and vectorizer
-=======
-# Define preprocessing function
-def preprocess_text(text):
-    STOP_WORDS = set(stopwords.words('english'))
-    text = text.lower()
-    text = re.sub(r'[^a-z\s]', '', text)
-    text = re.sub(r'\s+', ' ', text).strip()
-    tokens = [w for w in text.split() if w not in STOP_WORDS]
-    return " ".join(tokens)
-
-# Load model
->>>>>>> de8c92afba31a238e88df910e68a70c502b43c9b
 try:
     model = pickle.load(open('nb_model.pkl', 'rb'))
     vectorizer = pickle.load(open('tfidf_vectorizer.pkl', 'rb'))
@@ -61,7 +34,6 @@ except Exception as e:
     print(f"Error loading model: {e}")
     model_loaded = False
 
-<<<<<<< HEAD
 # Create static directory if it doesn't exist
 os.makedirs('static', exist_ok=True)
 
@@ -721,41 +693,3 @@ if __name__ == '__main__':
     
     # Start the Flask server
     app.run(debug=True)
-=======
-# Create a simple HTML template
-html_template = """
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Spam Detector</title>
-</head>
-<body>
-    <h1>Spam Detector</h1>
-    <form method="POST" action="/predict">
-        <textarea name="message" rows="5" cols="50"></textarea><br>
-        <input type="submit" value="Check Message">
-    </form>
-</body>
-</html>
-"""
-
-@app.route('/')
-def home():
-    return html_template
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    message = request.form.get('message', '')
-    
-    if not message or not model_loaded:
-        return "Error: No message or model not loaded"
-    
-    # Process the message
-    preprocessed = preprocess_text(message)
-    message_vector = vectorizer.transform([preprocessed])
-    prediction = model.predict(message_vector)[0]
-    
-    return f"Result: {prediction}"
-
-# Don't include if __name__ == '__main__' for production
->>>>>>> de8c92afba31a238e88df910e68a70c502b43c9b
