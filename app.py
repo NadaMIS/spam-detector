@@ -4,7 +4,7 @@ import re
 import nltk
 from nltk.corpus import stopwords
 import os
-from pyngrok import ngrok
+
 
 # Download necessary NLTK data
 try:
